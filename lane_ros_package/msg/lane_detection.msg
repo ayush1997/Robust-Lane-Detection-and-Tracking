@@ -1,0 +1,9 @@
+Header header
+float64 halfLaneWidth
+int64 timeCutLeft
+int64 timeCutRight
+float64[3] vehicleReferencePoint
+float64[9] leftLaneReferencePoint
+float64[9] rightLaneReferencePoint
+string leftLaneHeading
+string rightLaneHeading
