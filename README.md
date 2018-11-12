@@ -45,10 +45,10 @@ extracted.The image patches are further scaled to 224x224x3 and output is a Nx22
 
 ### Code
 
-***lane_ros_package/*** :  Contains the ROS workspace with **Lane_DetectorNode**(C++ node) subscribing to camera feed publishing the candidate lane patches which subscribed by **run_py_node**(Python node) which
+***lane_ros_package/*** :  Contains the ROS workspace with **Lane_DetectorNode**(C++ node) subscribing to camera feed publishing the candidate lane patches, which is subscribed by **run_py_node**(Python node) which
 is used to do inference using the trained alexnet to classify and apply Kalman filter for tracking the lanes.
 
-***training/train_alex.py*** : This used to finetune the imagenet pretrained Alexnet model with collected Indian dataset.
+***training/train_alex.py*** : This is used to finetune the imagenet pretrained Alexnet model with collected Indian dataset.
 
 ***preprocessing/aug_new.py*** : Data augmentation using techniques like
 horizontal flip, Gaussian blur followed by sharpening, apply shear
