@@ -43,7 +43,7 @@ extracted.The image patches are further scaled to 224x224x3 and output is a Nx22
 <hr/>
 <img align="left" width = "410" src="./util/image/tb1.png"><img width = "410" src="./util/image/tb2.png">
 
-### Content
+### Code
 
 ***lane_ros_package/*** :  Contains the ROS workspace with **Lane_DetectorNode**(C++ node) subscribing to camera feed publishing the candidate lane patches which subscribed by **run_py_node**(Python node) which
 is used to do inference using the trained alexnet to classify and apply Kalman filter for tracking the lanes.
