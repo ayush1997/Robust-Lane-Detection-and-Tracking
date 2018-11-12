@@ -28,7 +28,7 @@ labeled images.
 <p align="center"><b>Figure 1: Proposed lane detection and tracking framework</b></p>
 
 
-## Candidate lane image patch extraction
+### Candidate lane image patch extraction
 
 <img align="left" width="400" height="200"  src="./util/image/img_patch.png">
 
@@ -56,15 +56,42 @@ with added Gaussian noise and image darkening.
 
 ***preprocessing/extract_image.py*** : Used to extract candidate lane patches.
 
-## Results
+### Results
 
-### Lane classification results
+#### Lane classification results
 ![alt text](./util/image/result.png )
 <p align="center"><b>Figure 2:  a) in presence of shadow b) on curved roads c) in traffic d) in the presence of other signs
 on roads e) on highway</b></p>
 
 
-### Tracking results
+#### Tracking results
 ![alt text](./util/image/track_result.png )
 <p align="center"><b>Figure 3: Performance of Kalman filter (KF) for lane tracking (detected: red, predicted by KF: green)</b></p>
 
+### Experimental Results and Discussion
+Fig 2 shows lane detection results by the classification model which
+is run on the entire database consisting of 4500 images. The frame-
+work is run on a system equipped with a Quad-core 2.4GHz Intel
+i7 − 5500U CPU paired with 8GB DDR3 RAM and NVIDIA Titan X
+GPU which gives an average processing speed of 0.0262 sec/frame
+i.e 38fps, while running on a low end GPU NVIDIA GeForce 920M
+it runs at an average speed of 10-12fps. The model performs ro-
+bustly and is able to adapt to various lane conditions like shadowed
+lanes, traffic conditions where some part of the lane is covered by
+a vehicle as shown in Fig. 2(a) and Fig. 2(c) respectively. It works
+well on highway roads as shown in Fig. 2(e), detecting all lanes in
+comparatively less traffic conditions.Though currently not designed
+for curved roads with steep curvature, it works well for roads with
+small curvature as shown in Fig. 2(b). Since the detection module
+performs well in detecting multiple lanes, this method is scalable
+for multiple lane detection and tracking. 
+
+Fig. 3 shows the tracking result in different scenarios. In Figs.
+3(a), 3(b) and 3(c), the Kalman filter based tracker correctly predicts
+the true lane even in scenarios where the lane is occluded by a
+vehicle and thus a detection failure occurs. Figs. 3(d),3(e) and 3(f)
+represent the general case of performance of tracking, where as
+expected, tracking and detection outputs are similar. As seen in Figs.
+3(g), 3(h) and 3(i), the estimate tends to drift from the correct lane
+location during and/or just after a lane change. We have empirically
+observed that it stabilizes after 4 to 5 frames after lane change.
