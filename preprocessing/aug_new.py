@@ -1,5 +1,12 @@
 # reads from the train.txt
 
+# Data Augmentation : To increase the training examples and
+# avoid overfitting we use various data augmentation techniques like
+# horizontal flip,Gaussian blur followed by sharpening and image
+# darkening.The training set is increased five folds to 15000 after
+# applying the augmentation.
+
+
 from imgaug import augmenters as iaa
 import os
 import cv2
@@ -36,9 +43,6 @@ with open("total.txt") as f:
 path = '/home/ayush/lane/ext_image/' 
 
 
-# train_file = open("train_dual_aug.txt","w") 
-# val_file = open("val_dual_aug.txt","w") 
-
 train_file = open("train_aug.txt","w") 
 val_file = open("val_aug.txt","w") 
 
@@ -56,8 +60,6 @@ for n in content[1:]:
 
 	print (name,lane_type)
 	
-	# train_file.write("%s,%d\n" %(name,int(lane_type))) 
-	# if int(lane_type) == 0 or int(lane_type) == 1 :
 	if int(lane_type) == 0 :
 		sol.append(name)
 	elif int(lane_type) == 1:
