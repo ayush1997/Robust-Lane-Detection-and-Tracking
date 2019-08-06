@@ -56,32 +56,12 @@ swarath_package::lane_detection ld;
  
 
 int image_no = 1;
-// std::string path = "/home/ayush/Documents/swarath_lane/swarath/src/lanedetection_shubhamIITK/src/video1/";
-// std::string path = "/home/ayush/Documents/swarath_lane/swarath/src/lanedetection_shubhamIITK/src/new_results_1/";
-// std::string path = "/home/ayush/Documents/swarath_lane/swarath/src/lanedetection_shubhamIITK/src/lstm_low/";
-std::string path = "/home/ayush/Documents/swarath_lane/swarath/src/lanedetection_shubhamIITK/src/HT_ext_dnd/";
-// std::string pathc = "/home/ayush/Documents/swarath_lane/swarath/src/lanedetection_shubhamIITK/src/result/testing_canny/";
-//define a variable for our custom message. The custom message type has the form "package::MessageName"
-
-
-//Use method of ImageTransport to create image publisher
-//image_transport::Publisher pub("image_processor", &ld);
-
- 
-//This function is called everytime a new image is published
-
-
 
 vector<double> road_grad;
 vector<double>::iterator road_grad_i;
 
 vector<double> white_grad;
 vector<double>::iterator white_grad_i;
-
-  // ignore anything else on the line
-  // file_handler.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-
-
 
 int road_grad_size,white_grad_size;
 
@@ -142,7 +122,7 @@ void hough_ext(Mat image, vector<Point>& point1, vector<Point>& point2,vector<fl
   int const lines_max = 300;
   // int const lines_max = 80;
 
-cv::Mat input, bgr, hsv, gray;
+  cv::Mat input, bgr, hsv, gray;
   vector<cv::Mat> channels;
 
   // cv::Mat raw = cv::imread("/home/ayush/Documents/swarath_lane/swarath/src/lanedetection_shubhamIITK/src/hough_code/data/197.jpg");
@@ -154,12 +134,7 @@ cv::Mat input, bgr, hsv, gray;
       fprintf(stderr, "File input.jpg NOT FOUND!\n");
       // return EXIT_FAILURE;
   }
-  /* if */
 
-  // raw.convertTo(bgr, CV_8UC3);
-  // cv::cvtColor(bgr, hsv, CV_BGR2HSV);
-  // cv::split(hsv, channels);
-  // gray = channels[2];
 
   cv::cvtColor( raw, gray, CV_BGR2GRAY );
 
@@ -178,7 +153,7 @@ cv::Mat input, bgr, hsv, gray;
   // cv::Canny( gray, edges, 500,1000,5);
 
   namedWindow( "canny", WINDOW_AUTOSIZE );   // Create a window for display.
-      imshow( "canny", edges ); 
+  imshow( "canny", edges ); 
 
   // imwrite(pathc+std::to_string(image_no)+".jpg",edges);
 
@@ -207,8 +182,8 @@ cv::Mat input, bgr, hsv, gray;
                          );
 
 
-    assert(true == rhextended);
-  
+  assert(true == rhextended);
+
 
   double min_slope = 0.3;
   // double min_slope = 0.46;
@@ -220,80 +195,36 @@ cv::Mat input, bgr, hsv, gray;
   std::vector<double> slope;
 
 
-  for( unsigned int i = 0; i < vec_lines_extended.size(); ++i )
-  {
-     float rho = vec_lines_extended[i][0], theta = vec_lines_extended[i][1];
+  for( unsigned int i = 0; i < vec_lines_extended.size(); ++i ){
 
-     // cout<<rho;
-     
+    float rho = vec_lines_extended[i][0], theta = vec_lines_extended[i][1];
 
-     Point pt1, pt2;
-     double a = cos(theta), b = sin(theta);
-     double x0 = a*rho, y0 = b*rho;
-     pt1.x = cvRound(x0 + 1000*(-b));
-     pt1.y = cvRound(y0 + 1000*(a));
-     pt2.x = cvRound(x0 - 1000*(-b));
-     pt2.y = cvRound(y0 - 1000*(a));
+    // cout<<rho;
+    Point pt1, pt2;
+    double a = cos(theta), b = sin(theta);
+    double x0 = a*rho, y0 = b*rho;
+    pt1.x = cvRound(x0 + 1000*(-b));
+    pt1.y = cvRound(y0 + 1000*(a));
+    pt2.x = cvRound(x0 - 1000*(-b));
+    pt2.y = cvRound(y0 - 1000*(a));
 
 
 
-     double m = (double)(pt2.y-pt1.y)/(pt2.x-pt1.x);
-  if (!(abs(m) < min_slope)  && !(abs(m) > max_slope)){
+    double m = (double)(pt2.y-pt1.y)/(pt2.x-pt1.x);
+    if (!(abs(m) < min_slope)  && !(abs(m) > max_slope)){
 
-  // if (!(abs(m) < min_slope)){
-
-    slope.push_back(m);
-    point1.push_back(pt1);
-    point2.push_back(pt2);
-    lane_rho.push_back(rho);
+      slope.push_back(m);
+      point1.push_back(pt1);
+      point2.push_back(pt2);
+      lane_rho.push_back(rho);
       lane_theta.push_back(theta);
-
-    // line( raw, pt1, pt2, Scalar(0,0,255), 1, CV_AA);
-  }
+    }
      
   }
 
   removeClustersExt(point1, point2, slope,lane_rho,lane_theta);
-
-
-
 }
 
-
-template <class Container>
-void split3(const std::string& str, Container& cont,
-              char delim = ' ')
-{
-    std::size_t current, previous = 0;
-    current = str.find(delim);
-    while (current != std::string::npos) {
-        cont.push_back(str.substr(previous, current - previous));
-        previous = current + 1;
-        current = str.find(delim, previous);
-    }
-    cont.push_back(str.substr(previous, current - previous));
-}
-
-
-void chatterCallback(const std_msgs::String::ConstPtr& msg)
- {
-
-  // cout << msg->data<<endl;
-  string delimiter = " ";
-  string s = msg->data;
-  cout <<s<<endl;
-  // string token = s.substr(0, s.find(delimiter));
-  stringstream ss(s);
-  vector<double> numbers;
-
-  for(int i = 0; ss >> i; ) {
-      numbers.push_back(i);
-      cout << i << " "<<endl;
-  }
-
-  // cout << token<<endl;
-  // ROS_INFO("I heard: [%s]", /);
-}
 
 
 void imageCallback(const sensor_msgs::ImageConstPtr& original_image)
@@ -305,151 +236,102 @@ void imageCallback(const sensor_msgs::ImageConstPtr& original_image)
 
 
   Mat org;
-// ros::Rate loop_rate(1);
+  // ros::Rate loop_rate(1);
 
 
-    cv_bridge::CvImagePtr cv_ptr;
-    try
-    {
-        //Always copy, returning a mutable CvImage
-        //OpenCV expects color images to use BGR channel order.
-        cv_ptr = cv_bridge::toCvCopy(original_image, enc::BGR8);
-    }
-    catch (cv_bridge::Exception& e)
-    {
-        //if there is an error during conversion, display it
-        ROS_ERROR("swarath_package::main.cpp::cv_bridge exception: %s", e.what());
-        return;
-    }
-    
-      //After reading in the video stream and converting it to openCV format, it
-        //performs img processing steps.
+  cv_bridge::CvImagePtr cv_ptr;
+  try
+  {
+    //Always copy, returning a mutable CvImage
+    //OpenCV expects color images to use BGR channel order.
+    cv_ptr = cv_bridge::toCvCopy(original_image, enc::BGR8);
+  }
+  catch (cv_bridge::Exception& e)
+  {
+    //if there is an error during conversion, display it
+    ROS_ERROR("swarath_package::main.cpp::cv_bridge exception: %s", e.what());
+    return;
+  }
+
+  //After reading in the video stream and converting it to openCV format, it
+    //performs img processing steps.
 
 
-    sensor_msgs::ImagePtr im_msg = cv_bridge::CvImage(std_msgs::Header(), "bgr8", cv_ptr->image).toImageMsg();
-    im_msg = cv_bridge::CvImage(std_msgs::Header(), "bgr8", cv_ptr->image).toImageMsg();
-    swarath_package::lstm_data msg;
-    msg.im = *im_msg;
+  sensor_msgs::ImagePtr im_msg = cv_bridge::CvImage(std_msgs::Header(), "bgr8", cv_ptr->image).toImageMsg();
+  im_msg = cv_bridge::CvImage(std_msgs::Header(), "bgr8", cv_ptr->image).toImageMsg();
+  swarath_package::lstm_data msg;
+  msg.im = *im_msg;
 
 
-    resize(cv_ptr->image,cv_ptr->image,Size(640,480));
-      cout <<  cv_ptr->image.rows<<" "<<cv_ptr->image.cols<<endl;
+  resize(cv_ptr->image,cv_ptr->image,Size(640,480));
+  cout <<  cv_ptr->image.rows<<" "<<cv_ptr->image.cols<<endl;
 
 
-    // sensor_msgs::ImagePtr im_msg = cv_bridge::CvImage(std_msgs::Header(), "bgr8", cv_ptr->image).toImageMsg();
-    // swarath_package::lstm_data msg;
-    // msg.im_or = *im_msg;
 
 
-    //  int width = final_grad.cols;
-  // int height = final_grad.rows;
+  int bonnet = 430;// row value from where bonnet of car starts.
+  // int bonnet = 870;// row value from where bonnet of car starts.
 
-      int bonnet = 430;// row value from where bonnet of car starts.
-      // int bonnet = 870;// row value from where bonnet of car starts.
+  int sky = 185;// row value where sky ends
+  // int sky = 260;// row value where sky ends
+  // int sky = 475;// row value where sky ends
 
-      int sky = 185;// row value where sky ends
-      // int sky = 260;// row value where sky ends
-      // int sky = 475;// row value where sky ends
+  Mat org_before_roi = cv_ptr->image;
 
-      Mat org_before_roi = cv_ptr->image;
-
-      // imshow("OriginalBeforeCrop", org_before_roi);
-      
-
-      // Rect roi(0,sky,cv_ptr->image.cols -20,bonnet - sky);
-      Rect roi(0,sky,cv_ptr->image.cols,bonnet - sky);
-      cv_ptr->image = cv_ptr->image(roi);
+  // imshow("OriginalBeforeCrop", org_before_roi);
 
 
-      vector<Point> point1;
-      vector<Point> point2;
-      vector<Point> point3;
-      vector<Point> point4;
-      vector<float> lane_rho;
-    vector<float> lane_theta;
-
-      org = cv_ptr->image;
-
-      // sensor_msgs::ImagePtr im_msg = cv_bridge::CvImage(std_msgs::Header(), "bgr8", org).toImageMsg();
-      // im_msg = cv_bridge::CvImage(std_msgs::Header(), "bgr8", cv_ptr->image).toImageMsg();
-      // swarath_package::lstm_data msg;
-      // msg.im = *im_msg;
+  // Rect roi(0,sky,cv_ptr->image.cols -20,bonnet - sky);
+  Rect roi(0,sky,cv_ptr->image.cols,bonnet - sky);
+  cv_ptr->image = cv_ptr->image(roi);
 
 
+  vector<Point> point1;
+  vector<Point> point2;
+  vector<Point> point3;
+  vector<Point> point4;
+  vector<float> lane_rho;
+  vector<float> lane_theta;
+
+  org = cv_ptr->image;
 
       // hough(cv_ptr->image,point1,point2);
-      hough_ext(cv_ptr->image,point1,point2,lane_rho,lane_theta);
+  hough_ext(cv_ptr->image,point1,point2,lane_rho,lane_theta);
 
 
-      // houghIntensity(cv_ptr->image,point1,point2,1,point3,point2);
-    //cout<<point3.size()<<"\n";
-
-      // Here we get points
+  // Here we get points
 
 
-      for(int i=0;i<point1.size();i++){
-        // cout<<"Points are:"<<'\n';
-        // cout<<point1[i]<<point2[i];
-
-        // imwrite(path + std::to_string(image_no)+".jpg",cv_ptr->image);
-
-        line(cv_ptr->image,point1[i],point2[i],Scalar(0,255,0),1,1);
-        // line(org_before_roi,point1[i]+Point(0,sky),point2[i]+Point(0,sky),Scalar(0,255,0),1,1);
+  for(int i=0;i<point1.size();i++){
+   
+    line(cv_ptr->image,point1[i],point2[i],Scalar(0,255,0),1,1);
+  
+    }
 
 
-        }
-
-
-    // cout<<"Number of lanes -- "<< point1.size()<<endl;
-
-    // for(int i=0; i<lane_rho.size(); ++i)
-  //      cout << lane_rho[i] << ' ';
-    // cout<<endl;
-    // for(int i=0; i<lane_theta.size(); ++i)
-    //  cout << lane_theta[i] << ' ';
-    // cout<<endl;
-
-
-
-  // vecotr
-  // cout<<point1;
-  // cout<<point2;
-
-  // vector<int> global_label;
+  
   
   vector<int> global_points;
 
-  
+
   // global_label.push_back(point1.size());
 
   for(int i=0;i<point1.size();i++){
-    // cout<<"Points are:"<<'\n';
-      // cout<<point1[i]<<point2[i];
 
-  global_points.push_back(point1[i].x);
-  global_points.push_back(point1[i].y);
-  global_points.push_back(point2[i].x);
-  global_points.push_back(point2[i].y);
+    global_points.push_back(point1[i].x);
+    global_points.push_back(point1[i].y);
+    global_points.push_back(point2[i].x);
+    global_points.push_back(point2[i].y);
 
   }
 
 
-  // imwrite(path + std::to_string(image_no)+".jpg",cv_ptr->image);
   image_no+=1;
 
   imshow("LaneDetectionAlgo", cv_ptr->image);
-  // imshow("LaneDetectionAlgo", org_before_roi);
-
-  // imwrite(path + std::to_string(image_no)+".jpg",cv_ptr->image);
-
-
-  // sensor_msgs::ImagePtr im_msg = cv_bridge::CvImage(std_msgs::Header(), "bgr8", cv_ptr->image).toImageMsg();
+ 
   
-  // msg.label = global_label;
   msg.points = global_points;
-  // msg.rho = lane_rho;
-  // msg.theta = lane_theta;
-  // cout<<*im_msg;
   pub.publish(msg);
   // loop_rate.sleep();
 
@@ -461,48 +343,39 @@ void imageCallback(const sensor_msgs::ImageConstPtr& original_image)
 
 
 }
- 
-/**
-* This tutorial demonstrates simple image conversion between ROS image message and OpenCV formats and image processing
-*/
 
 
-
-  int main(int argc, char **argv)
+int main(int argc, char **argv)
   {
     
-        ros::init(argc, argv, "Lane_DetectorNode");
-        ros::NodeHandle nh;
+    ros::init(argc, argv, "Lane_DetectorNode");
+    ros::NodeHandle nh;
 
 
     //Create an ImageTransport instance, initializing it with our NodeHandle.
-        image_transport::ImageTransport it(nh);
-    
-
-
-
+    image_transport::ImageTransport it(nh);
 
     //OpenCV HighGUI call to create a display window on start-up.
     cv::namedWindow(WINDOW, CV_WINDOW_AUTOSIZE);
 
-  
-        // ros::Subscriber sub_track = nh.subscribe("/chatter", 1, chatterCallback);
-        image_transport::Subscriber sub = it.subscribe("camera/image_color", 1, imageCallback);
-        
-        // image_transport::Subscriber sub = it.subscribe("/clock", 1, imageCallback);
 
-        // pub = nh.advertise<swarath_package::lane_detection>("Lane_DetectorTopic", 1);
-        // pub = nh.advertise<swarath_package::lane_detection>("lstm", 1);
-        pub = nh.advertise<swarath_package::lstm_data>("lstm", 1);
-        
+   
+    image_transport::Subscriber sub = it.subscribe("camera/image_color", 1, imageCallback);
+
+    // image_transport::Subscriber sub = it.subscribe("/clock", 1, imageCallback);
+
+    // pub = nh.advertise<swarath_package::lane_detection>("Lane_DetectorTopic", 1);
+    // pub = nh.advertise<swarath_package::lane_detection>("lstm", 1);
+    pub = nh.advertise<swarath_package::lstm_data>("lstm", 1);
+
     //OpenCV HighGUI call to destroy a display window on shut-down.
     cv::destroyWindow(WINDOW);
- 
 
-        ros::spin();
+
+    ros::spin();
     //ROS_INFO is the replacement for printf/cout.
     ROS_INFO("swarath_package::main.cpp::No error.");
- 
+
 
     return 0;
   }

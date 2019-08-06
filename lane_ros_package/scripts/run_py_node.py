@@ -45,9 +45,6 @@ f_r.x = np.array([[285],[80],[587],[260]])   # velocity
 # f.x = np.array([[350],[100],[55],[10]])   # velocity
 f_l.x = np.array([[331],[80],[156],[265]])   # velocity
 
-# print (f_r.x.shape)
-# f.F= np.array([[0.8]])   
-# f.F = np.array([[1,1,0,0],[0,1,0,0],[0,0,1,1],[0,0,0,1]])
 
 # state transistion matrix
 
@@ -221,7 +218,7 @@ def process_points(points):
 
 
 
-alexnet_model = torch.load("/home/ayush/Documents/swarath_lane/swarath/src/lanedetection_shubhamIITK/src/exp_aug.pkl")
+alexnet_model = torch.load("exp_aug.pkl")
 # print alexnet_model
 count = 0
 
@@ -237,12 +234,6 @@ def prep_data(org_image,cv_image,f_points):
 
   # msg_cov = []
   msg_cov = ""
-
-  # pub = rospy.Publisher('/chatter', String)
-  # rospy.init_node('prep_data', anonymous=True)
-
-
-  # rate = rospy.Rate(8)
 
   img  = cv_image
 
@@ -297,15 +288,7 @@ def prep_data(org_image,cv_image,f_points):
 
     # apply the mask
     masked_img = cv2.bitwise_and(img, mask)
-    # print masked_img.shape
-    # plt.imshow(masked_img)
-    # plt.show()
-    #for curved lane
-    # masked_img_cop = masked_img[60:,:,:]
-    # plt.imshow(masked_img)
-    # plt.show()
 
-    # print i,j
 
     k1 = 70
     k2 = 30
@@ -339,20 +322,6 @@ def prep_data(org_image,cv_image,f_points):
         # crop_img = masked_img[j[1]:i[1], j[0]-offset:j[0]+offset]
         crop_img = masked_img[z[1]:i[1], j[0]-offset:j[0]+offset]
         # crop_img = masked_img[z[1]:i[1], cdj[0]-offset:j[0]+offset]
-    # elif i[0] == j[0]:
-    #   print "true"
-    #   if i[1]<j[1]:
-    #     crop_img = masked_img[i[1]:j[1], i[0]-offset:i[0]+offset]
-    #   else:
-    #     crop_img = masked_img[j[1]:i[1], j[0]-offset:j[0]+offset]
-
-
-    # print masked_img_cop.shape
-
-    # plt.imshow((cv2.cvtColor(masked_img, cv2.COLOR_BGR2RGB)))
-    # cv2.imwrite("results/curve_data/"+str(n)+".jpg",masked_img)
-
-    # plt.show()
 
     crop_img = cv2.resize(crop_img,(224,224))
 
@@ -363,12 +332,6 @@ def prep_data(org_image,cv_image,f_points):
     # print inputs
     # print (pil_im)
     image_vec.append(inputs)
-
-    # plt.imshow((cv2.cvtColor(crop_img, cv2.COLOR_BGR2RGB)))
-    # cv2.imwrite("result_aug/"+str(n)+".jpg",crop_img)
-
-    # cv2_im = cv2.cv
-    # tColor(crop_img,cv2.COLOR_BGR2RGB)
 
 
   if len(image_vec)!=0:
@@ -384,14 +347,7 @@ def prep_data(org_image,cv_image,f_points):
     o = outputs.data.cpu().numpy()
     # print (o)
     preds =  np.argmax(o,axis=1)
-    # print ("pred",preds)
-
-    # e_x = np.exp(o[0] - np.max(o[0]))
-    # score = e_x / e_x.sum(axis=0)
-    # print "pred",(pred)
-    # # print "score",(score)
-
-    # sky = 260
+   
     sky = 185
 
 
@@ -411,52 +367,6 @@ def prep_data(org_image,cv_image,f_points):
 
     hello_str = ""
 
-
-    # if list(np.diagonal(pred_l_cov)) <= [29.0,34.5,37.0,41.0]:
-    # if list(np.diagonal(pred_l_cov)) <= [29.0,29.0,29.0,29.0]:
-
-    #   # hello_str = str([i[0] for i  in pred_l])
-    #   for i  in pred_l:
-    #     hello_str = hello_str + str(i[0]) + " " 
-
-    #   # msg_cov.append(hello_str)
-    #   msg_cov += hello_str
-
-      
-    # else:
-    #   # msg_cov.append("False")
-    #   msg_cov += "False "
-      
-      
-    # hello_str = ""
-    
-    # # if list(np.diagonal(pred_r_cov)) <= [57.0,60.5,64.0,67.0]:
-    # if list(np.diagonal(pred_r_cov)) <= [56.0,56.0,56.0,56.0]:
-    #   # msg_cov.append("True")
-    #   # hello_str = str([i[0] for i  in pred_r])
-
-    #   for i  in pred_l:
-    #     hello_str = hello_str + str(i[0]) + " " 
-
-    #   msg_cov += hello_str
-
-
-    #   # msg_cov.append(hello_str)
-
-      
-    # else:
-    #   # msg_cov.append("False")
-    #   msg_cov += "False "
-      
-
-    # pub.publish(str(msg_cov))  
-    # rate.sleep()
-
-
-    # print pred_r
-    # print pred_l
-    # print left_lane_cov
-    # print right_lane_cov
 
     l_slope = []
     r_slope = []
@@ -521,26 +431,6 @@ def prep_data(org_image,cv_image,f_points):
           l_slope.append((slope,i,j))
 
 
-        # cv2.line(org,tuple(i),tuple(j),color=(0,255,0),thickness=2)
-
-        # cv2.line(org_image,tuple(i)+tuple(),tuple(j),color=(0,255,0),thickness=2)
-
-      # print "score",(score)
-
-      # if pred == 0 and np.max(score)>0.85 :
-      # # if pred == 0  :
-      #   cv2.line(org,tuple(i),tuple(j),color=(0,255,0),thickness=2)
-      # else:
-      #   cv2.line(img,tuple(i),tuple(j),color=(0,0,255))
-          
-      # plt.imshow((cv2.cvtColor(img, cv2.COLOR_BGR2RGB)))
-      # plt.imshow((cv2.cvtColor(crop_img, cv2.COLOR_BGR2RGB)))
-      # plt.show()
-    # SaveFigureAsImage("/home/ayush/Documents/swarath_confidence_new/model_test/"+str(n), plt.gcf() , orig_size=(h,w))
-
-      # cv2.imshow("Image window", org_image)
-      # cv2.waitKey(3)
-
   ###########################################3
 
     r_slope.sort(key=lambda x: x[0],reverse=True)
@@ -571,10 +461,6 @@ def prep_data(org_image,cv_image,f_points):
       lane_not_detect_count_left += 1
 
 
-
-    # print "r_slope",r_slope
-    # print "l_slope",l_slope
-
     if len(r_slope) != 0 :  
       cv2.line(org_image,tuple([r_slope[0][1][0],r_slope[0][1][1]]),tuple([r_slope[0][2][0],r_slope[0][2][1]]),color=(0,0,255),thickness=2)
     if len(l_slope) !=0:
@@ -604,7 +490,7 @@ def prep_data(org_image,cv_image,f_points):
 
   ################################3
 
-    cv2.imwrite("/home/ayush/Documents/swarath_lane/swarath/src/lanedetection_shubhamIITK/src/kalman_image_test/"+str(count)+".jpg", org_image)
+    cv2.imwrite(""+str(count)+".jpg", org_image)
       # val_file.write("%s\n" %(str(n)+"_"+str(count)+".jpg")) 
       
     count+=1
@@ -615,7 +501,7 @@ def prep_data(org_image,cv_image,f_points):
   else:
     cv2.imshow('Frame',org_image)
     cv2.waitKey(3)
-    cv2.imwrite("/home/ayush/Documents/swarath_lane/swarath/src/lanedetection_shubhamIITK/src/kalman_image_test/"+str(count)+".jpg", org_image)
+    cv2.imwrite("/home/ayush/Documents/swarath_lane/kalman_image_test/"+str(count)+".jpg", org_image)
 
     count+=1
 
@@ -636,14 +522,10 @@ class image_converter:
     start_time = time.time()
     
     try:
-      # rospy.loginfo("%s is age: %d" % (data.im))
-      # print (data.label)
-      # print (data.points)
+     
       cv_image = self.bridge.imgmsg_to_cv2(data.im, "bgr8")
 
       org_image = cv_image.copy()
-
-      # print ("org image",org_image.shape)
 
       cv_image =  cv2.resize(cv_image,(640,480))
 
@@ -653,24 +535,7 @@ class image_converter:
 
       cv_image = cv_image[sky:bonnet,0:640]
 
-      # print (cv_image.shape)
-
-
-
-
-      # cv_image_org = self.bridge.imgmsg_to_cv2(data.im_org, "bgr8")
-
-      # print (data.points)
-
-      # if data.label[0] > 0:
-
       f_points = process_points(data.points)
-      # lane_type = process_label(data.label)
-
-      # print (len(lane_type))
-      # print (len(f_points))
-
-      # print (f_points)
 
       prep_data(org_image,cv_image,f_points)
         
@@ -679,11 +544,7 @@ class image_converter:
     except CvBridgeError as e:
       print(e)
 
-   
 
-    # cv2.imshow("Image window", cv_image)
-
-    # cv2.imwrite(path + str(self.img_no)+".jpg",cv_image);
     print("saved")
     self.img_no +=1
 
@@ -695,9 +556,6 @@ class image_converter:
 def main(args):
   ic = image_converter()
   rospy.init_node('image_converter', anonymous=True)
-
-
-
   try:
     rospy.spin()
   except KeyboardInterrupt:
@@ -708,14 +566,3 @@ if __name__ == '__main__':
 
 
     main(sys.argv)
-
-
-    # FNR = "righ_cov"
-    # FNL = "left_cov"
-    # # open the file for writing
-    # fileObject_r = open(FNR,'wb') 
-    # fileObject_l = open(FNL,'wb') 
-    # pickle.dump(left_lane_cov,fileObject_r)   
-    # pickle.dump(right_lane_cov,fileObject_l)   
-
-

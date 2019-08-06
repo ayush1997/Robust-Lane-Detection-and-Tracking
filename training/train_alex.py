@@ -180,12 +180,7 @@ def train_model(model,criterion,optimizer, lr_scheduler, num_epochs, init_lr, de
                 val_acc.append([epoch_acc,epoch_loss])
             else:
                 train_acc.append([epoch_acc,epoch_loss])
-            # if phase == 'val':
-            #     log_value('val_loss', epoch_loss, epoch)
-            #     log_value('val_acc', epoch_acc, epoch)
-            # else:
-            #     log_value('tr_loss', epoch_loss, epoch)
-            #     log_value('tr_acc', epoch_acc, epoch)
+        
 
             print('{} Loss: {:.6f} Acc: {:.4f}'.format(
                 phase, epoch_loss, epoch_acc))
@@ -212,13 +207,6 @@ def train_model(model,criterion,optimizer, lr_scheduler, num_epochs, init_lr, de
     print (train_acc)
     print (val_acc)
     return best_model
-
-
-# model_ft = models.resnet50(pretrained=True)
-# features =list(model_ft.children())
-# # print (features)
-# features.pop()
-# features.append(nn.Linear(2048, 3))
 
 
 #alexnet
