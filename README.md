@@ -4,14 +4,12 @@
 
 A robust lane-detection and tracking framework is an essential
 component of an advanced driver assistant system, for autonomous
-vehicle applications. The problem of lane detection and tracking in-
-cludes challenges such as varying clarity of lane markings, change
+vehicle applications. The problem of lane detection and tracking includes challenges such as varying clarity of lane markings, change
 in visibility conditions like illumination, reflection, shadows etc.
 In this paper, a robust and real-time vision-based lane detection
 and tracking framework is proposed. The proposed framework
 consists of lane boundary candidate generation based on extended
-hough transform and CNN based lane classification model for de-
-tection. Additionally, a Kalman filter is used for lane tracking. The
+hough transform and CNN based lane classification model for detection. Additionally, a Kalman filter is used for lane tracking. The
 framework is trained and evaluated on the data collected by our
 experimental vehicle on Indian roads. The dataset consists of a total
 of 4500 frames with varying driving scenarios, including highways,
@@ -61,6 +59,11 @@ on roads e) on highway</b></p>
 #### Tracking results
 ![alt text](./util/image/track_result.png )
 <p align="center"><b>Figure 3: Performance of Kalman filter (KF) for lane tracking (detected: red, predicted by KF: green)</b></p>
+
+#### Video Outputs
+[![Video Output 1](https://img.youtube.com/vi/dsu4hUzAaks/0.jpg)](https://www.youtube.com/watch?v=dsu4hUzAaks)
+[![Video Output 2](https://img.youtube.com/vi/Pt--81ScLiA/0.jpg)](https://www.youtube.com/watch?v=Pt--81ScLiA)
+
 
 ### Experimental Results and Discussion
 Fig 2 shows lane detection results by the classification model which
