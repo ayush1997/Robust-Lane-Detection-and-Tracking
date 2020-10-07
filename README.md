@@ -81,8 +81,9 @@ on roads e) on highway</b></p>
 <p align="center"><b>Figure 3: Performance of Kalman filter (KF) for lane tracking (detected: red, predicted by KF: green)</b></p>
 
 #### Video Outputs
-[![Video Output 1](https://img.youtube.com/vi/dsu4hUzAaks/0.jpg)](https://www.youtube.com/watch?v=dsu4hUzAaks)
-[![Video Output 2](https://img.youtube.com/vi/Pt--81ScLiA/0.jpg)](https://www.youtube.com/watch?v=Pt--81ScLiA)
+[![Video Output 1](https://img.youtube.com/vi/Pt--81ScLiA/0.jpg)](https://www.youtube.com/watch?v=Pt--81ScLiA)
+[![Video Output 2](https://img.youtube.com/vi/dsu4hUzAaks/0.jpg)](https://www.youtube.com/watch?v=dsu4hUzAaks)
+
 
 
 ### Experimental Results and Discussion
